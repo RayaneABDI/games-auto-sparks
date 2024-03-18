@@ -1,28 +1,35 @@
 
 import {exportToDB} from "../ExportToDB/ExportToDB";
 import {importFromDB} from "./ImportFromDB";
-import {exportAllItem, exportAllItemClass, exportItemClassIndex} from "../ExportToDB/ImportItemFromExternal";
+import {
+    exportAllItem,
+    exportAllItemClass,
+    exportAllItemStats,
+    exportItemClassIndex,
+} from "../ExportToDB/ImportItemFromExternal";
 
 const date:Date = new Date();
 
 const updateTableQuery ="INSERT INTO update_table (table_name) VALUES ($1)"
 export async function updateDataBase() {
-    if(await checkDataBaseModification("item_class",2629800)){
+    exportAllItemStats()
+    if(await checkDataBaseModification("item_class",5259600)){
         console.log("Need to update item_class")
         exportItemClassIndex().then(() => {
             console.log("ExportToDB Item Class Index done")
             updateDataBaseModification("item_class")
         })
-    }if(await checkDataBaseModification("item_subclass",2629800)){
+    }if(await checkDataBaseModification("item_subclass",5259600)){
         console.log("Need to update item_subclass")
         exportAllItemClass().then(async () => {
             console.log("ExportToDB Item Class done")
             updateDataBaseModification("item_subclass")
         })
     }
-    if(await checkDataBaseModification("item_table",2629800)){
+    if(await checkDataBaseModification("item_table",5259600)){
         console.log("Need to update item_class")
         exportAllItem()
+        exportAllItemStats()
         console.log("Export To Db Item done")
         updateDataBaseModification("quality_type")
         updateDataBaseModification("inventory_type")

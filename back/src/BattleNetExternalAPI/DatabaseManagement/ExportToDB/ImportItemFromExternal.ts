@@ -1,5 +1,11 @@
 import {exportToDB} from "./ExportToDB";
-import {getItem, getItemClass, getItemClassIndex, getItemMedia} from "../../ExternalApiCall/ItemAPIRequest";
+import {
+    getItem,
+    getItemClass,
+    getItemClassIndex,
+    getItemMedia,
+    getItemStats
+} from "../../ExternalApiCall/ItemAPIRequest";
 import {importFromDB} from "../ImportToDB/ImportFromDB";
 import {v4 as uuid} from "uuid";
 import {Item} from "../../../Model/WOWItemModel/ItemModel";
@@ -17,7 +23,9 @@ const itemNamePost:string="INSERT INTO item_name_language (item_language_id, it_
 const itemQualityPost:string="INSERT INTO quality_type (quality_type, it_it, ru_ru, en_gb, zh_tw, ko_kr, en_us, es_mx, pt_br, es_es, zh_cn, fr_fr, de_de) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11, $12,$13) ON CONFLICT DO NOTHING";
 const itemInventoryTypePost:string="INSERT INTO inventory_type (inventory_type, it_it, ru_ru, en_gb, zh_tw, ko_kr, en_us, es_mx, pt_br, es_es, zh_cn, fr_fr, de_de) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) ON CONFLICT DO NOTHING";
 const itemIdGet: string = "SELECT id FROM item_table WHERE item_subclass_uuid = $1";
+const itemGetAllId: string = "SELECT id,item_stats FROM item_table";
 const countItemGet: string = "SELECT count(*) FROM item_table WHERE item_subclass_uuid = $1"
+const itemStatsQueryPost: string = "UPDATE item_table SET item_stats = $1 WHERE id=$2";
 
 export async function exportItemClassIndex() {
     const exportedItemClassIndex = await getItemClassIndex();
@@ -100,4 +108,20 @@ async function exportingItem(item:Item,importSubclassId:QueryResult<any>,itemCla
     console.log("update item name")
     await exportToDB([item.data.id, item.data.level, item.data.sell_price,importSubclassId.rows[0].subclass_uuid, item.data.is_equippable, item.data.purchase_quantity, itemMedia,itemClassId, item.data.quality.type, item.data.max_count, item.data.is_stackable, itemLanguageItemUuuid,item.data.purchase_price, item.data.inventory_type.type,item.data.required_level,], itemQueryPost);
     console.log("Done importing to db the item :",item.data.id)
+}
+
+async function exportItemStats(itemId:number) {
+    const itemStats = await getItemStats(itemId);
+    await exportToDB([itemStats,itemId],itemStatsQueryPost)
+}
+
+export function exportAllItemStats () {
+    importFromDB(itemGetAllId, []).then(async r => {
+        for(const row of r.rows) {
+            if(!row.item_stats){
+            await exportItemStats(row.id);
+            console.log("item_stats exported for the item :",row.id)
+            }
+        }
+    })
 }

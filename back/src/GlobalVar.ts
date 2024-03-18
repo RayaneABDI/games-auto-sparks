@@ -8,7 +8,8 @@ export enum GlobalVar{
     itemClassUrl = 'item-class/',
     itemMediaUrl = 'media/item/',
     itemUrl="search/item",
-    access_token="KR21dbQoKxytkajTDGOHXAMtMJXXvFGDnx"
+    itemStatsUrl = 'item/',
+    access_token="KRK2Y8m4qdLBeA91NBb9XraKBeXlso792B"
 }
 
 export enum regionVar{

@@ -71,3 +71,16 @@ export async function getItemMedia(itemId: number):Promise<string> {
 
 }
 
+export async function getItemStats(itemId: number):Promise<string> {
+    return axios.get(GlobalVar.baseUrl + GlobalVar.itemStatsUrl+itemId, {
+        params: itemClassIndexParams
+    })
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
+}
+
