@@ -1,0 +1,11 @@
+.example-container {
+  @apply w-[500px] h-full border-[1px] border-solid border-opacity-5 border-black
+}
+
+.example-sidenav-content {
+  @apply flex h-full items-center justify-center
+}
+
+.example-sidenav {
+  @apply p-5
+}
