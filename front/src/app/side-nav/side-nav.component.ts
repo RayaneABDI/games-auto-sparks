@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {MatSidenavModule} from "@angular/material/sidenav";
-import {MatButtonModule} from "@angular/material/button";
+import {MatLegacyButtonModule as MatButtonModule} from "@angular/material/legacy-button";
 
 @Component({
   selector: 'app-side-nav',
