@@ -3,6 +3,7 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatIcon} from "@angular/material/icon";
 import {NgOptimizedImage} from "@angular/common";
 import {MatListItem, MatNavList} from "@angular/material/list";
+import {OverviewComponent} from "../overview/overview.component";
 
 @Component({
   selector: 'app-side-nav',
@@ -13,7 +14,8 @@ import {MatListItem, MatNavList} from "@angular/material/list";
     MatIcon,
     NgOptimizedImage,
     MatNavList,
-    MatListItem
+    MatListItem,
+    OverviewComponent
   ],
   standalone: true
 })
